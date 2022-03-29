@@ -1,0 +1,742 @@
+<!-- HELLO! you found this! thank you for actually wanting to look at the code, this took me a while to code. all i can say is to have fun with it!-->
+
+
+
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title>DVD</title>
+    <style>
+      @font-face {
+        font-family: MerSans;
+        src: url(MerriweatherSans-SemiBold.ttf);
+      }
+      @font-face {
+        font-family: MerSansBolg;
+        src: url(MerriweatherSans-ExtraBold.ttf);
+      }
+
+      body {
+        padding: 0px;
+        border: 0px;
+        margin: 0px;
+        height: 100%;
+        overflow: hidden;
+        font-family: MerSans;
+      }       
+      .dabody {
+        background-image: url("black.png");
+        background-size:cover;
+      }
+      .dvdimage {
+        width: 150px;
+        position: float;
+      }
+      .debug-div {
+        background-color: white;
+        position: absolute;
+        color: black;
+        width: 260px;
+        text-align: center;
+        top: 5px;
+        z-index: 50;
+
+      }
+      .bounces-text {
+        color: white;
+        position: absolute;
+        bottom: 0;
+        right: 20px;
+      }
+      .textToggy {
+        margin-left: 5px;
+        background-color: #af4c4c;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+      }
+      .applybutton {
+        margin-left: 5px;
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+      .resetbutton {
+        margin-left: 5px;
+        background-color: #af4c4c;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+      .info-text {
+        color: white;
+        bottom: 0px;
+        position: absolute;
+      }
+      
+      a {
+        color: white;
+      }
+
+      .info-panel {
+        color: black;
+        background-color: white;
+        width: 80vw;
+        height: 80vh;
+        left: 10vw;
+        top: 10vh;
+        position: absolute;
+        z-index: 500;
+        overflow-y: auto;
+      }
+      strong {
+        font-family: MerSansBolg;
+      }
+      .advancedToggy {
+        margin-left: 5px;
+        background-color: #bdbdbd;
+        border: none;
+        color: black;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+      }
+      button {
+        font-family: MerSans;
+      }
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 5px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      .sharebutton {
+        margin-left: 5px;
+        background-color: #4c7aaf;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin-bottom: 10px;
+        margin-top: 0px;
+      }
+      .notification-thing {
+        text-align: center;
+        width: 100vw;
+      }
+      .copied-notif {
+        background-color: white;
+        text-align: center;
+        font-family: MerSans;
+        color: black;
+        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+        width: 20vw;
+      }
+      
+    </style>
+
+  </head>
+  <body id="dabody" class="dabody">
+
+    <img src="dvd.png" class="dvdimage" id="dvd">
+
+
+    <div class="debug-div" id="debug-tools">
+      <h4>debug tools</h4>
+      <div style="text-align: right; padding-right: 15px;">
+        <p>show debug text <button class="textToggy" type="button" onclick="debugTextToggleButton()" id="textToggleButton">False</button></p>
+        <p>animation speed <input type="number" id="animSPEED" min="1" max="10000"></p>
+        <p>slope x <input type="number" id="slopeX" min="1" max="1000"></p>
+        <p>slope y <input type="number" id="slopeY" min="1" max="1000"></p>
+        <p>image width <input type="number" id="imgWidth" min="1" max="1000"></p>
+        <p>logo image url <input type="text" id="logoUrl"></p>
+        <p>background image url <input type="text" id="backUrl"></p>
+        <p>text colour <input type="color" value="#ffffff" id="textColour"></p>
+      </div>
+      <p><button class="applybutton" type="button" onclick="applyButton()" id="applybutton" style="margin-bottom: 0px;">apply</button><button class="resetbutton" type="button" onclick="resetButton()" id="resetbutton" style="margin-bottom: 0px;">reset</button></p>
+      <p><button class="sharebutton" type="button" onclick="shareButton()" id="sharebutton">share</button></p>
+      <img src="x.svg" id="close-debug" style="position: absolute; top: 5px; right: 5px; width: 25px;" onclick="closeDebug()">
+    </div>
+
+
+    <!--
+    <img src="arrow.svg" id="open-debug" style="position: absolute; top: 45vh; left: 5px; z-index: 5; width: 25px; fill: red;" onclick="openDebug()">
+    -->
+    <svg xmlns="http://www.w3.org/2000/svg" id="open-debug" style="position: absolute; top: 45vh; left: 5px; z-index: 5; width: 25px;" onclick="openDebug()"
+      width="0.333333in" height="0.333333in"
+      viewBox="0 0 100 100">
+      <path id="openArrowPath"
+        fill="white" fill-opacity="0.5" stroke="none" stroke-width="1"
+        d="M 10.00,0.00
+           C 10.00,0.00 0.00,10.00 0.00,10.00
+             0.00,10.00 40.00,50.00 40.00,50.00
+             40.00,50.00 0.00,90.00 0.00,90.00
+             0.00,90.00 10.00,100.00 10.00,100.00
+             10.00,100.00 60.00,50.00 60.00,50.00
+             60.00,50.00 10.00,0.00 10.00,0.00" />
+      </svg>
+
+
+
+
+    <div class="bounces-text">
+      <h3 id="bouncy">Bounces:</h3>
+    </div>
+
+    <div class="info-text" id="infotext">
+      <h4 style="margin-top: 0px; margin-bottom: 0px; padding-left: 5px;">Made as a part of <a href="https://dapug.lol/boredom/" id="boredomlink">Boredom Projects.</a></h4>
+      <h4 style="margin-top: 0px; margin-bottom: 0px; padding-bottom: 5px; padding-left: 5px;"><span style="text-decoration: underline; cursor: pointer;" onclick="openInfo()">More Info</span> about this website.</h4>
+    </div>
+
+    <div class="info-panel" id="infopanel">
+      <img src="x.svg" id="close-info" style="position: absolute; top: 5px; right: 5px; width: 25px;" onclick="closeInfo()">
+      <h3 style="text-align: center;">Site Info/Help</h3>
+      <p style="text-align: center;">this site is an emulation of the DVD idle screen, where the dvd logo bounces from wall to wall. the arrow on the left will open the debug menu, which has a bunch of neat settings for the site</p>
+      <h4 style="text-align: center"><strong>debug options:</strong></h4>
+      <p style="padding-left: 10px;"><strong>show debug text:</strong> show a block of text across the screen that tells information (not very well) about what's happening in the animation</p>
+      <p style="padding-left: 10px;"><strong>animation speed:</strong> changes the speed of the animation. the number is how many milliseconds in-between every animation update</p>
+      <p style="padding-left: 10px;"><strong>slope x & y:</strong> the amount of pixels the logo moves either horiontally (x) or veritcally (y)</p>
+      <p style="padding-left: 10px;"><strong>image width:</strong> the width in pixels of the logo</p>
+      <p style="padding-left: 10px;"><strong>logo image url:</strong> an image url that will replace the dvd logo</p>
+      <p style="padding-left: 10px;"><strong>background image url:</strong> an image url that will replace the background</p>
+      <p style="padding-left: 10px;"><strong>text color:</strong> changes the colour of the overlay text, to be better seen if the background image is replaced</p>
+      <p style="padding-left: 10px;"><strong>apply:</strong> applies changes to the webpage</p>
+      <p style="padding-left: 10px;"><strong>reset:</strong> resets the webpage</p>
+      <p style="padding-left: 10px;"><strong>share:</strong> copies the current settings into a shareable link you can use to share what you made with your friends</p>
+      
+      
+      <div style="text-align: center;"><button class="advancedToggy" type="button" onclick="advancedInfoToggle()" id="advancedInfoButton">advanced info</button></div>
+      <div style="padding-bottom: 10px"></div>
+
+      <div class="advanced-info" id="advancedinfo">
+        <h3 style="text-align: center;"><strong>advanced info</strong></h3>
+        <p style="padding-left: 10px;"><strong>shareable links:</strong></p>
+        <p style="padding-left: 10px;"><strong>shared:</strong> ?shared=true, ?shared=false, if set to true, the site will apply any added settings to the link</p>
+        <p style="padding-left: 10px;"><strong>debugtext:</strong> ?debugtext=true, ?debugtext=false, <strong>"show debug text"</strong></p>
+        <p style="padding-left: 10px;"><strong>animspeed:</strong> ?animspeed=[number], <strong>"animation speed"</strong></p>
+        <p style="padding-left: 10px;"><strong>slopex:</strong> ?slopex=[number], <strong>"slope x & y"</strong></p>
+        <p style="padding-left: 10px;"><strong>slopey:</strong> ?slopey=[number], <strong>"slope x & y"</strong></p>
+        <p style="padding-left: 10px;"><strong>width:</strong> ?width=[number], <strong>"image width"</strong></p>
+        <p style="padding-left: 10px;"><strong>imgurl:</strong> ?imgurl=[url], <strong>"logo image url"</strong></p>
+        <p style="padding-left: 10px;"><strong>backurl:</strong> ?backurl=[url], <strong>"background image url"</strong></p>
+        <p style="padding-left: 10px;"><strong>colour:</strong> ?colour=[hex colour code], <strong>"text colour"</strong></p>
+
+
+      </div>
+    
+    
+    
+    </div>
+
+    <div class="notification-thing">
+
+      <div class="copied-notif" id="copiednotif">
+        <h3 style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; margin: 0px;">share url copied to clipboard.</h3>
+      </div>
+
+    </div>
+
+
+
+  </body>
+
+  <p id="pp" style="color: white; position: absolute; top: 10px; left: 10px; z-index: 1;"></p>
+
+
+
+
+<script>
+
+
+// code made by https://dapug.lol/boredom/dvd
+
+var debug = true;           // debug
+
+var debugTextToggle = false; // [debug] toggle debug messages
+
+var animSpeed = 15;         // the number of milliseconds per animation frame
+var imageWidth = 150;       // the pixel size of the image width
+var imageHeight = 200;      // the pixel size of the image height
+var time = 500;               // [development] amount of ticks it'll run for
+var currentTick = 0;          // [debug] current tick it's on
+var startAngleY = 1;          // the default starting rise of the angle the logo moves
+var startAngleX = 1;          // the default starting run of the angle the logo moves
+var angleY = 0;               // [setup] current rise
+var angleX = 0;               // [setup] current run
+var windowWidth = 0;          // [setup] window width 
+var windowHeight = 0;         // [setup] window height
+var logoWidth = 0;            // [setup] logo width
+var logoHeight = 0;           // [setup] logo height
+var logoX = 50;               // logo x placement
+var logoY = 50;               // logo y placement
+var logoOppX = 0;             // logo x coordinate of opposite side
+var logoOppY = 0;             // logo y coordinate of opposite side
+var logoVert = false;         // if the logo is heading down/up, false for up, true for down
+var logoHoriz = true;         // if the logo is heading left/right, true for right, false for left
+var debugMove = true;         // [debug][development] toggle if the logo moves
+var bounces = 0;              // the amount of times it's bounced
+var LOGOURL = "dvd.png";      // setup for the logo url
+var BACKURL = "black.png";    // setup for the back url
+var mainColour = "ffffff";    // setup for main colour
+
+// SHARING
+
+// hide the notification for the copied thingy tmtmtmmtmtmt
+document.getElementById("copiednotif").style.display = "none";
+
+
+function shareButton() {
+                // REMEMBER TO SET IT TO DAPUG.LOL BEFORE LAUNCHING!!!
+  var startLink = "https://dapug.lol/boredom/dvd?shared=true";
+  var finalLink = startLink;
+  
+  // debug text
+  if (debugTextToggle == true) {
+    finalLink = `${finalLink}&debugtext=true`;
+  } else {
+    finalLink = `${finalLink}&debugtext=false`;
+  }
+
+  // anim speed
+  finalLink = `${finalLink}&animspeed=${animSpeed}`;
+  
+  // slopes
+  finalLink = `${finalLink}&slopex=${startAngleX}`;
+  finalLink = `${finalLink}&slopey=${startAngleY}`;
+
+  // image width
+  finalLink = `${finalLink}&width=${logoWidth}`;
+
+  // urls
+  finalLink = `${finalLink}&imgurl=${LOGOURL}`;
+  finalLink = `${finalLink}&backurl=${BACKURL}`;
+
+  // colour
+
+  noHash = mainColour.replace("#", "");
+
+  finalLink = `${finalLink}&colour=${noHash}`;
+
+
+
+  // copy to clipboard
+  navigator.clipboard.writeText(finalLink);
+
+  document.getElementById("copiednotif").style.display = "block";
+
+
+  setTimeout(() => { document.getElementById("copiednotif").style.display = "none"; }, 2000);
+}
+
+
+
+// code made by https://dapug.lol/boredom/dvd
+
+
+
+
+
+
+// url parsing
+
+var debugMenu = document.getElementById("debug-tools");
+  // get the url variable thingy into a varable ™
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  
+
+  const urlDebug = urlParams.get('debug');
+  const urlDebugText = urlParams.get('debugtext');
+  const urlAnimSpeed = urlParams.get('animspeed');
+  const urlSlopeX = urlParams.get('slopex');
+  const urlSlopeY = urlParams.get('slopey');
+  const urlWidth = urlParams.get('width');
+  const urlUrl = urlParams.get('imgurl');
+  const urlBackUrl = urlParams.get('backurl');
+  const urlColour = urlParams.get('colour');
+  const urlShared = urlParams.get('shared');
+
+
+  if (urlShared == "true") {
+    if (urlDebugText == "true") {
+
+      debugTextToggle = true;
+      
+    } else {
+      debugTextToggle = false;
+    }
+    animSpeed = urlAnimSpeed;
+    
+    startAngleY = urlSlopeY;
+    startAngleX = urlSlopeX;
+    document.getElementById('dvd').style.width = `${urlWidth}px`;
+
+    if (urlUrl !== null) {
+      document.getElementById("dvd").src = urlUrl;
+      LOGOURL = urlUrl;
+    }
+    if (urlBackUrl !== null) {
+      document.getElementById("dabody").style.backgroundImage = `url(${urlBackUrl}`;
+      BACKURL = urlBackUrl;
+    }
+
+    mainColour = urlColour;
+    
+    document.getElementById("pp").style.color = `#${mainColour}`;
+    document.getElementById("bouncy").style.color = `#${mainColour}`;
+    document.getElementById("infotext").style.color = `#${mainColour}`;
+    document.getElementById("boredomlink").style.color = `#${mainColour}`;
+    document.getElementById("openArrowPath").style.fill = `#${mainColour}`;
+
+    // setting values for the inputs
+
+    document.getElementById("animSPEED").value = animSpeed;
+    document.getElementById("slopeX").value = startAngleX;
+    document.getElementById("slopeY").value = startAngleY;
+    
+  
+    document.getElementById("imgWidth").value = document.getElementById('dvd').clientWidth;
+    
+    
+    document.getElementById("logoUrl").value = LOGOURL;
+    document.getElementById("backUrl").value = BACKURL;
+
+    var removedHash = mainColour.replace('#', ''); // to remove any # from it because it breaks the site TM
+    document.getElementById("textColour").value = `#${removedHash}`;
+
+  }
+
+
+
+
+
+
+  if (urlDebug == "true") {
+    debugMenu.style.display = "block";
+  } else {
+    debugMenu.style.display = "none";
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// hide info panel on page load
+document.getElementById("infopanel").style.display = "none";
+
+
+
+// debug functions
+
+function closeDebug() {
+  debugMenu.style.display = "none";
+}
+// code made by https://dapug.lol/boredom/dvd
+
+function openDebug() {
+  debugMenu.style.display = "block";
+}
+
+// info menu
+var infoMenu = document.getElementById("infopanel");
+
+function closeInfo() {
+  infoMenu.style.display = "none";
+}
+
+function openInfo() {
+  infoMenu.style.display = "block";
+}
+
+// ADVANCED info menu (tm)
+
+var advancedInfoMenu = document.getElementById("advancedinfo");
+
+// making it hidden on default
+advancedInfoMenu.style.display = "none";
+
+
+function advancedInfoToggle() {
+  if (advancedInfoMenu.style.display == "block") {
+    advancedInfoMenu.style.display = "none";
+  } else {
+    advancedInfoMenu.style.display = "block";
+  }
+}
+
+
+function debugTextToggleButton() {
+  
+  var btn = document.getElementById("textToggleButton");
+
+  
+
+  if (debugTextToggle == true) {
+    debugTextToggle = false;
+    btn.innerHTML = 'False';
+    btn.style.backgroundColor = "#af4c4c";
+    document.getElementById("pp").innerHTML = "";
+  } else {
+    debugTextToggle = true;
+    btn.innerHTML = 'True';
+    btn.style.backgroundColor = "#4CAF50";
+  }
+
+  debugTextToggle == false;
+}
+// code made by https://dapug.lol/boredom/dvd
+
+function applyButton() {
+
+  
+// empty input protection
+// if the input box is empty, it will set the input as the default parameter
+var animSPED = document.getElementById("animSPEED").value;
+if (animSPED == "") {
+  animSPED = 15;
+}
+var slopeX = document.getElementById("slopeX").value;
+if (slopeX == "") {
+  slopeX = 1;
+}
+slopeX = parseInt(slopeX);
+var slopeY = document.getElementById("slopeY").value;
+if (slopeY == "") {
+  slopeY = 1;
+}
+slopeY = parseInt(slopeY);
+var imGWidth = document.getElementById("imgWidth").value;
+if (imGWidth == "") {
+  imGWidth = 150;
+  parseInt(imGWidth);
+}
+var logoURL = document.getElementById("logoUrl").value;
+if (logoURL == "") {
+  logoURL = "dvd.png";
+}
+var backURL = document.getElementById("backUrl").value;
+if (backURL == "") {
+  backURL = "black.png";
+}
+
+
+
+
+clearInterval(intervalID);
+intervalID = setInterval(obama, animSPED);
+animSpeed = animSPED;
+
+startAngleY = slopeY;
+startAngleX = slopeX;
+
+
+
+
+
+
+// change width
+document.getElementById('dvd').style.width = `${imGWidth}px`;
+
+//image url
+
+document.getElementById("dvd").src = logoURL;
+LOGOURL = logoURL;
+
+// background url
+
+document.getElementById('dabody').style.backgroundImage = `url(${backURL}`;
+BACKURL = backURL;
+
+// code made by https://dapug.lol/boredom/dvd
+
+// text colour
+
+var textCOLOUR = document.getElementById("textColour").value;
+
+
+mainColour = textCOLOUR;
+
+document.getElementById("pp").style.color = mainColour;
+document.getElementById("bouncy").style.color = mainColour;
+document.getElementById("infotext").style.color = mainColour;
+document.getElementById("boredomlink").style.color = mainColour;
+document.getElementById("openArrowPath").style.fill = mainColour;
+
+
+
+
+}
+
+
+
+
+function resetButton () {
+  window.location.href = "https://dapug.lol/boredom/dvd";
+}
+
+
+// move it away from the corner so it dont freak out
+document.getElementById('dvd').style.transform = `translate(${logoX}px, ${logoY}px)`;
+
+function obama() {
+
+
+  //console.log(debugTextToggle);
+  var bounceText = document.getElementById('bouncy');
+  bounceText.innerHTML = `Bounces: ${bounces}`;
+  
+
+
+
+
+  var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+  var windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+  var logo = document.getElementById('dvd');
+  logoWidth = logo.clientWidth;
+  logoHeight = logo.clientHeight;
+
+  // calculate the opposite logo values
+  logoOppX = logoX + logoWidth;
+  logoOppY = logoY + logoHeight;
+
+  // code made by https://dapug.lol/boredom/dvd
+
+  startAngleY = parseInt(startAngleY);
+  startAngleX = parseInt(startAngleX);
+
+  // set the angles for if they change
+  if (logoVert == true) {
+    angleY = startAngleY;
+  } else if (logoVert == false) {
+    angleY = startAngleY - (startAngleY * 2);
+  }
+  if (logoHoriz == true) {
+    angleX = startAngleX;
+  } else if (logoHoriz == false) {
+    angleX = startAngleX - (startAngleX * 2);
+  }
+  
+
+  // BOUNCING
+
+  if (logoVert == false) {
+    // going up
+    if (logoY <= 0) {
+      logoVert = true;
+      bounces = bounces + 1;
+    }
+  }
+  if (logoVert == true) {
+    // going down
+    if (logoOppY >= windowHeight) {
+      logoVert = false;
+      bounces = bounces + 1;
+    }
+  }
+  if (logoHoriz == false) {
+    // going left
+    if (logoX <= 0) {
+      logoHoriz = true;
+      bounces = bounces + 1;
+    }
+  }
+  if (logoHoriz == true) {
+    // going right
+    if (logoOppX >= windowWidth) {
+      logoHoriz = false;
+      bounces = bounces + 1;
+    }
+  }
+// code made by https://dapug.lol/boredom/dvd
+
+
+
+  
+  if (debugTextToggle == true) {
+    
+
+    var debugText = document.getElementById("pp");
+    var text = document.createTextNode(`tick: ${currentTick}, page width: ${windowWidth}, page height: ${windowHeight}, logo width: ${logoWidth}, logo height: ${logoHeight}, logo x: ${logoX}, logoY: ${logoY}, vertical: ${logoVert}, horizontal: ${logoHoriz}, angle y: ${angleY}, angle x: ${angleX} | `);
+    var divisibleThing = currentTick / 54;
+    
+    if (divisibleThing % 1 == 0 && currentTick != 0) {
+      debugText.innerHTML = "";
+    } else {
+      debugText.appendChild(text);
+    }
+    
+    
+  
+  }
+  
+  if (debugMove == true) {
+    parseInt(angleY);
+    parseInt(angleX);
+    parseInt(logoY);
+    parseInt(logoX);
+    // moving the logo
+    logoX += angleX;
+    logoY += angleY;
+
+    //alert(`X: ${logoX} Y: ${logoY}`)
+
+    logo.style.transform = `translate(${logoX}px, ${logoY}px)`;
+  }
+  
+
+
+  currentTick = currentTick + 1;
+
+};
+// code made by https://dapug.lol/boredom/dvd
+
+intervalID = setInterval(obama, animSpeed);
+
+
+</script>
+
+
+
+
+</html>
